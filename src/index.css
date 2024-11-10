@@ -4,13 +4,51 @@
   background-position: center;
 }
 
+.Home-logo{
+  width: 200px;
+  height: 200px;
+}
+
 .bg-overlay{
   background: linear-gradient(45deg, rgba(47, 140, 96, 0.7), rgba(0, 0, 0, 0.5));
 }
+
+.avatar-img{
+  width: 40px;
+  height: 40px;
+}
+
+.fill-recipe-container{
+  border-radius: 1rem;
+  background-color: rgba(240, 255, 239, 1);
+}
+
 .sidebar-container .ps-sidebar-container{
   background-color: #1F263E;
+  height: 150vh;
 }
 
 .sidebar-container .ps-menu-button{
-  
+  color: #fff !important;
+}
+
+
+.sidebar-container .ps-menu-button:hover{
+  color: rgb(47, 140, 96, 0.5) !important;
+}
+
+.sidebar-container .ps-menu-button:hover{
+  background-color: transparent !important;
+}
+
+.header-container{
+  border-radius: 1rem;
+  background-image: url('./assets/images/header-Ellipse.svg'), 
+  linear-gradient(90deg, rgb(20, 121, 69) 31%, rgb(22, 133, 75) 78%);
+  background-size: cover;
+}
+
+.table-header tr{
+  border-radius: 1rem;
+  padding-top: 12rem;
 }

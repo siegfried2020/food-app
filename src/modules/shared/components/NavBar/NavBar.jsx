@@ -1,45 +1,10 @@
-import {  NavLink } from "react-router-dom";
+import avatar from "../../../../assets/images/avatar.png";
 
-export default function NavBar() {
- return (<div>Navbar</div>
-  //<nav>
-  //   <ul>
-  //     <li>
-  //       <NavLink to="/">Home</NavLink>
-  //     </li>
-      
-  //     <li>
-  //       <NavLink to="users">Users</NavLink>
-  //     </li>
-      
-  //     <li>
-  //       <NavLink to="/recipes">Recipes</NavLink>
-  //     </li>
-      
-  //     <li>
-  //       <NavLink to="categories">Category</NavLink>
-  //     </li>
-      
-  //     <li>
-  //       <NavLink to="/login">Login</NavLink>
-  //     </li>
-  //     <li>
-  //       <NavLink to="/changePassword">changePass</NavLink>
-  //     </li>
-      
-  //     <li>
-  //       <NavLink to="/ForgetPassword">ForgetPass</NavLink>
-  //     </li>
-      
-  //     <li>
-  //       <NavLink to="/ResetPassword">ResetPass</NavLink>
-  //     </li>
-      
-
-  //     <li>
-  //       <NavLink to="/Registration">Registration</NavLink>
-  //     </li>
-  //   </ul>
-  // </nav>
-  );
+export default function NavBar({loginData}) {
+ return (
+  <div className="bg-white py-3 d-flex justify-content-end align-items-center">
+    <img className="mx-3 avatar-img" src={avatar} alt="user-img" />
+    <span>{loginData?.userName}</span>
+  </div> 
+);
 }

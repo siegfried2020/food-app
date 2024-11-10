@@ -16,7 +16,7 @@ import RecipeData from "./modules/recipes/components/recipeData/RecipeData.jsx";
 import CategoryData from "./modules/categories/components/CategoryData/CategoryData.jsx";
 import { ToastContainer } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { jwtDecode } from "jwt-decode";
 import ProtectedRoute from "./modules/shared/components/PrtectedRoute/ProtectedRoute.jsx";
 
@@ -25,8 +25,16 @@ function App() {
   let saveLoginData=()=>{
     let decodedToken= localStorage.getItem('token');
     let encodedToken= jwtDecode(decodedToken);
-    console.log(encodedToken);
+    setLoginData(encodedToken);
+    //console.log(encodedToken);
   }
+
+
+  useEffect(()=>{
+    if(localStorage.getItem('token'))
+      saveLoginData();
+  },[])
+
   const routes= createBrowserRouter([
     {
       path:'',
@@ -43,13 +51,15 @@ function App() {
     {
       path:'dashboard',
       element:(
-      <ProtectedRoute><MasterLayout/></ProtectedRoute>),
+      <ProtectedRoute loginData={loginData}>
+        <MasterLayout loginData={loginData}/>
+      </ProtectedRoute>),
       errorElement:<NotFound/>,
       children:[
-        {index:true, element:<Dashboard/>},
-        {path:'recipes', element:<RecipeList/>},
-        {path:'recipe-data', element:<RecipeData/>},
-        {path:'categories', element:<CategoriesList/>},
+        {index:true, element:<Dashboard loginData={loginData}/>},
+        {path:'recipes', element:<RecipeList loginData={loginData}/>},
+        {path:'recipe-data', element:<RecipeData />},
+        {path:'categories', element:<CategoriesList />},
         {path:'category-data', element:<CategoryData/>},
         {path:'users', element:<UsersList/>},
         
