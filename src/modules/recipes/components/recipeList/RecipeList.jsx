@@ -1,8 +1,6 @@
 import Header from "../../../shared/components/Header/Header";
 import axios from "axios";
 import {React, useEffect, useState } from "react";
-import Modal from 'react-bootstrap/Modal';
-import sora from "../../../../assets/images/sora.png";
 import DeleteConfirmation from "../../../shared/components/DeleteConfirmation/DeleteConfirmation";
 export default function RecipeList() {
   
@@ -23,7 +21,7 @@ export default function RecipeList() {
           headers:{Authorization:localStorage.getItem("token")}
         }
       )
-      console.log(response.data.data)
+      //console.log(response.data.data)
       setRecipesList(response.data.data)
 
     }
