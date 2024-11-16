@@ -19,7 +19,8 @@ export const USERS_URLS={
 export const CATEGORY_URLS={
   GET_CATEGORIES:`/Category/`,
   POST_CATEGORY:`/Category/`,
-  DELETE_CATEGORY:(id)=>`/Category/${id}`
+  DELETE_CATEGORY:(id)=>`/Category/${id}`,
+  UPDATE_CATEGORY:(id)=>`/Category/${id}`
 }
 
 // Recipe

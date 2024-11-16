@@ -10,23 +10,32 @@ import { useForm } from "react-hook-form";
 import { ToastContainer, toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import AddConfirmation  from "../../../shared/components/AddConfirmation/AddConfirmation";
+import { EditCategory } from "../EditCategory/EditCategory";
 
 export default function CategoriesList() {
   const [categoriesList, setCategoriesList]=useState([]);
   const [selectedId, setSelectedId]=useState(0);
-  const [show, setShow] = useState(false);
   
+  const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = (id) =>{ 
-    setSelectedId(id)
-    setShow(true)
+    setSelectedId(id);
+    setShow(true);
   };
 
-  
+  // Add Category
   const [showAdd, setShowAdd]=useState(false);
   const handleCloseAdd = () => setShowAdd(false);
-  const handleShowAdd = (id) =>{ 
-    setShowAdd(true)
+  const handleShowAdd = () =>{ 
+    setShowAdd(true);
+  };
+
+  // Edit Category
+  const [showEdit, setShowEdit]=useState(false);
+  const handleCloseEdit = () => setShowEdit(false);
+  const handleShowEdit = (id) =>{ 
+    setSelectedId(id);
+    setShowEdit(true);
   };
 
 // "https://upskilling-egypt.com:3006/api/v1/Category/?pageSize=10&pageNumber=1"
@@ -46,11 +55,11 @@ export default function CategoriesList() {
   };
 
 
-  let onSubmit= async(data)=>{
+  let createCategory= async(data)=>{
     try{
-      let response=await axiosInstance.post(CATEGORY_URLS.POST_CATEGORY, data)
+      let response=await axiosInstance.post(CATEGORY_URLS.POST_CATEGORY,data)
       toast.success("Category added")
-      console.log(response.data.data)
+      console.log(response)
       getCategories()
     }
     catch(error){
@@ -60,7 +69,21 @@ export default function CategoriesList() {
     handleCloseAdd()
   };
 
-  // axios.delete(`https://upskilling-egypt.com:3006/api/v1/Category/${selectedId}`
+  let updateCategory= async(data)=>{
+    try{
+      let response=await axiosInstance.put(CATEGORY_URLS.UPDATE_CATEGORY(selectedId),data)
+      toast.success("Category edited")
+      //console.log(response.data.data)
+      getCategories()
+    }
+    catch(error){
+      toast.error(error)
+      console.log(error)
+    }
+    handleCloseEdit()
+  };
+
+  // axios.delete(`https://upskilling-egypt.com:3006/api/v1/Category/${selectedId}`)
   let deleteCategory=()=>{
     try{
       let response=axiosInstance.delete(CATEGORY_URLS.DELETE_CATEGORY(selectedId));
@@ -86,7 +109,37 @@ export default function CategoriesList() {
     
       
     
-    <AddConfirmation showAdd={showAdd} handleCloseAdd={handleCloseAdd} onSubmit={onSubmit}/>
+    <AddConfirmation showAdd={showAdd} handleCloseAdd={handleCloseAdd} onSubmit={createCategory}/>
+
+    {/* <Modal show={showEdit} onHide={handleCloseEdit}>
+        <Modal.Header className="border-0"  closeButton>
+          <Modal.Title>Edit category</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <div className="text-center">
+            <form onSubmit={handleSubmit(UpdateCategory)}>
+                
+              {errors.name && <span className="text-danger ">{errors.name.message}</span>}
+              <div className="input-group mb-3 my-5">
+
+                <input type="text" 
+                className="form-control text-bg-secondary"
+                placeholder="Category Name" aria-label="name" aria-describedby="basic-addon1"
+                {...register('name',{required:'Name is required'}) }/>
+             </div>
+              <Modal.Footer>
+               <button className="btn btn-success border-success px-5  text-white" >
+                  Save
+               </button>
+              </Modal.Footer>
+
+            </form>
+          </div>
+        </Modal.Body>
+        
+    </Modal> */}
+
+    <EditCategory showEdit={showEdit} handleCloseEdit={handleCloseEdit} UpdateCategory={updateCategory}/>
 
       <div className="d-flex justify-content-between mx-1 p-4">
         <h3>Category Table Details</h3>
@@ -111,7 +164,10 @@ export default function CategoriesList() {
               <td>
                 <i className="bi bi-trash-fill text-danger mx-3 fs-5" 
                 onClick={()=>handleShow(category.id)} aria-hidden="true"></i>
-                <i className="bi bi-pencil-square text-warning fs-5" aria-hidden="true"></i>
+                
+                <i className="bi bi-pencil-square text-warning fs-5"
+                onClick={()=>handleShowEdit(category.id)}
+                aria-hidden="true"></i>
               </td>
             </tr>
 
