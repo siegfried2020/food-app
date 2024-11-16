@@ -52,3 +52,10 @@
   border-radius: 1rem;
   padding-top: 12rem;
 }
+
+.modal-header .btn-close {
+  border-radius: 50%;
+  border: solid red 2px;           
+  padding: 10px;   
+}
+

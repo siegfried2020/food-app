@@ -11,13 +11,13 @@ export default function DeleteConfirmation({show, handleClose, onDelete, childre
         <Modal.Body>
           <div className="text-center">
             <img src={sora} alt="" />
-            <h5>Delete This {children}?</h5>
+            <h5 className='my-3'>Delete This {children}?</h5>
             <p className="text-muted">are you sure you want to delete this item ? if you are sure just click on delete it</p>
           </div>
         </Modal.Body>
         <Modal.Footer>
           
-          <button className="btn btn-white border-danger  text-danger" onClick={onDelete}>
+          <button className="btn btn-light border-danger text-danger" onClick={onDelete}>
             Delete This {children}
           </button>
         </Modal.Footer>

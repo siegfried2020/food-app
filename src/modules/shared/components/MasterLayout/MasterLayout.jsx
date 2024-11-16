@@ -9,7 +9,7 @@ export default function MasterLayout({loginData}) {
   <div className="d-flex">
     <div className="bg-info"><SideBar/></div>
     
-    <div className="w-75">
+    <div className="w-100">
       <NavBar loginData={loginData}/>
       
       <Outlet/>

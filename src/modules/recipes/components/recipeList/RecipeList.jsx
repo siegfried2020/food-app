@@ -1,7 +1,11 @@
 import Header from "../../../shared/components/Header/Header";
 import axios from "axios";
 import {React, useEffect, useState } from "react";
+import Modal from 'react-bootstrap/Modal';
+import sora from "../../../../assets/images/sora.png";
 import DeleteConfirmation from "../../../shared/components/DeleteConfirmation/DeleteConfirmation";
+import { axiosInstance, imgbaseURL, RECIPE_URLS } from "../../../../services/api/urls";
+import NoData from "../../../shared/components/NoData/NoData";
 export default function RecipeList() {
   
   const [recipesList, setRecipesList]=useState([]);
@@ -9,19 +13,18 @@ export default function RecipeList() {
   const [show, setShow] = useState(false);
 
   const handleClose = () => setShow(false);
-  const handleShow = () =>{ 
-    // alert(selectedId)
+  const handleShow = (id) =>{ 
+    setSelectedId(id)
     setShow(true)
   };
 
   let getRecipes= async()=>{
     try{
-      let response=await axios.get("https://upskilling-egypt.com:3006/api/v1/Recipe/?pageSize=10&pageNumber=1",
-        {
-          headers:{Authorization:localStorage.getItem("token")}
-        }
+      let response=await axiosInstance.get(RECIPE_URLS.GET_RECIPES,{params:{
+        pageSize:10, pageNumber:1
+      }}
       )
-      //console.log(response.data.data)
+      console.log(response.data.data)
       setRecipesList(response.data.data)
 
     }
@@ -29,20 +32,17 @@ export default function RecipeList() {
       console.log(error)
     }
   };
-
+// `https://upskilling-egypt.com:3006/api/v1/Recipe/${selectedId}`
   let deleteRecipe=()=>{
     try{
-      let response=axios.delete(`https://upskilling-egypt.com:3006/api/v1/Recipe/${selectedId}`,
-        {
-          headers:{Authorization:localStorage.getItem("token")}
-        }
+      let response=axiosInstance.delete(RECIPE_URLS.DELETE_RECIPE(selectedId)
       );
       // console.log(response);
       getRecipes()
     }catch(error){
       console.log(error)
     }
-    alert(selectedId)
+    // alert(selectedId)
     handleClose();
   }
 
@@ -70,14 +70,16 @@ export default function RecipeList() {
       
       <div className="p-4">
 
+      {recipesList.length > 0 ?
         <table className="table table-white table-striped">
           <thead className="table-header table-secondary table-borderless">
             <tr >
-              <th scope="col">ItemName</th>
+              <th scope="col">Name</th>
               <th scope="col">Image</th>
               <th scope="col">Price</th>
               <th scope="col">Description</th>
               <th scope="col">tag</th>
+              <th scope="col">category</th>
               <th scope="col">Actions</th>
               
             </tr>
@@ -86,13 +88,18 @@ export default function RecipeList() {
             {recipesList.map(recipe=>
             <tr key={recipe.id}>
               <td>{recipe.name}</td>
-              <td>{recipe.imagePath}</td>
+              <td>{recipe.imagePath ?
+                <img className="w-25" src={`${imgbaseURL}/${recipe.imagePath}`} alt="" />
+                :<img className="w-25" src={NoData} alt="" />}
+              </td>
               <td>{recipe.price}</td>
               <td>{recipe.description}</td>
               <td>{recipe.tag.id}</td>
+              <td></td>
+              
               <td>
                 <i className="bi bi-trash-fill text-danger mx-3 fs-5" 
-                onClick={()=>handleShow(setSelectedId(recipe.id))} aria-hidden="true"></i>
+                onClick={()=>handleShow(recipe.id)} aria-hidden="true"></i>
                 <i className="bi bi-pencil-square text-warning fs-5" aria-hidden="true"></i>
               </td>
             </tr>
@@ -100,7 +107,7 @@ export default function RecipeList() {
             )}
             
           </tbody>
-        </table>
+        </table> : <NoData/>}
       </div>
     </div>
   );
