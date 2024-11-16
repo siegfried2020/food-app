@@ -1,6 +1,6 @@
 import Modal from 'react-bootstrap/Modal';
 import { useForm } from 'react-hook-form';
-export function EditCategory({showEdit, handleCloseEdit, UpdateCategory}) {
+export default function EditCategory({showEdit, handleCloseEdit, UpdateCategory}) {
   let {register, formState:{errors}, handleSubmit}=useForm();
   return (
   <>

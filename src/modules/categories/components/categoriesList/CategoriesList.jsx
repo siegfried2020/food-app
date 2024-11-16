@@ -10,7 +10,7 @@ import { useForm } from "react-hook-form";
 import { ToastContainer, toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import AddConfirmation  from "../../../shared/components/AddConfirmation/AddConfirmation";
-import { EditCategory } from "../EditCategory/EditCategory";
+import  EditCategory from "../EditCategory/EditCategory";
 
 export default function CategoriesList() {
   const [categoriesList, setCategoriesList]=useState([]);
