@@ -34,56 +34,51 @@ export default function Login({saveLoginData}) {
     //   }
     // }
     <>
-    
+        
+      <div className="title my-4">
+        <h3 className="fw-bold h5">Login</h3>
+        <span className="text-body-tertiary">Welcome back! Please enter your details</span>
+      </div>
       
-      
+      <form onSubmit={handleSubmit(onSubmit)}>
+
+        {errors.email && <span className="text-danger ">{errors.email.message}</span>}
+        <div className="input-group mb-3">
             
-              <div className="title my-4">
-                <h3 className="fw-bold h5">Login</h3>
-                <span className="text-body-tertiary">Welcome back! Please enter your details</span>
-              </div>
-              <form onSubmit={handleSubmit(onSubmit)}>
+          <span className="input-group-text" id="basic-addon1">
+            <i className="bi bi-envelope fs-5" aria-hidden='true'></i>
+          </span>
 
-              {errors.email && <span className="text-danger ">{errors.email.message}</span>}
-                <div className="input-group mb-3">
-                  
-                  <span className="input-group-text" id="basic-addon1">
-                    <i className="bi bi-envelope fs-5" aria-hidden='true'></i>
-                  </span>
-
-                <input type="email" 
-                  className="form-control" 
-                  placeholder="Enter your E-mail" aria-label="Email" 
-                  aria-describedby="basic-addon1"
-                  {...register('email', EMAIL_VALIDATION)
-                    }
-                  />
-                </div>
+          <input type="email" 
+            className="form-control" 
+            placeholder="Enter your E-mail" aria-label="Email" 
+            aria-describedby="basic-addon1"
+            {...register('email', EMAIL_VALIDATION)
+              }
+            />
+        </div>
                 
-                {errors.password && <span className="text-danger">{errors.password.message}</span>}
-                <div className="input-group mb-3">
-                  
-                  <span className="input-group-text" id="basic-addon1">
-                    <i className="bi bi-key fs-5" aria-hidden='true'></i>
-                  </span>
+        {errors.password && <span className="text-danger">{errors.password.message}</span>}
+        <div className="input-group mb-3">
+            
+          <span className="input-group-text" id="basic-addon1">
+            <i className="bi bi-key fs-5" aria-hidden='true'></i>
+          </span>
 
-                <input type="password" 
-                  className="form-control" 
-                  placeholder="Password" 
-                  aria-label="password" 
-                  aria-describedby="basic-addon1"
-                  {...register('password', {required:'field is required'
-                
-                  })
-                    }/>
-                </div>
+          <input type="password" 
+          className="form-control" 
+          placeholder="Password" 
+          aria-label="password" 
+          aria-describedby="basic-addon1"
+          {...register('password', {required:'field is required'})}/>
+        </div>
 
-              <div className="links d-flex justify-content-between">
-                  <Link to='/register' className="text-muted text-decoration-none">Regisiter Now?</Link>
-                  <Link to='/forget-password' className="text-success text-decoration-none">Forgot Password</Link>
-                </div>
-                <button className="btn btn-success w-100 py-2 my-4 text-white rounded-3 border-0">Login</button>
-              </form>
+        <div className="links d-flex justify-content-between">
+            <Link to='/register' className="text-muted text-decoration-none">Regisiter Now?</Link>
+            <Link to='/forget-password' className="text-success text-decoration-none">Forgot Password</Link>
+        </div>
+        <button className="btn btn-success w-100 py-2 my-4 text-white rounded-3 border-0">Login</button>
+      </form>
               
     </>
   );

@@ -1,6 +1,6 @@
 export const getRequiredMessage=(fieldName)=>`${fieldName} is required`;
 
-export const EMAIL_VALIDATION={required:'field is required',
+export const EMAIL_VALIDATION={required:'Email is required',
   pattern:{
     value:/[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/i,
     message: "Invalid Email"

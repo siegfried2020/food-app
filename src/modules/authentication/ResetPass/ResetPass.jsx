@@ -6,15 +6,23 @@ import {ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import axios from "axios";
 import { axiosInstance, USERS_URLS } from "../../../services/api/urls";
-import { EMAIL_VALIDATION } from "../../../services/api/validations";
+import { EMAIL_VALIDATION, PasswordValidation } from "../../../services/api/validations";
 
 export default function ResetPass() {
   const navigate=useNavigate();
   const location=useLocation();
   const [isPasswordVisible, setIsPasswordVisible]=React.useState(false);
   const [isConfirmPasswordVisible, setIsConfirmPasswordVisible]=React.useState(false);
-  let {register, formState:{isSubmitting, errors}, 
-  handleSubmit}=useForm({defaultValues:{email:location.state}});
+  let {register, watch, trigger, formState:{isSubmitting, errors}, 
+  handleSubmit}=useForm({defaultValues:{email:location.state}, mode:"onChange"});
+
+  const password=watch("password");
+  const confirmPassword=watch("confirmPassword");
+  React.useEffect(()=>{
+    if(confirmPassword){
+      trigger("confirm Password")
+    }
+  }, [password, confirmPassword, trigger])
   const onSubmit= async (data)=>{
     try{
       let response=await axiosInstance.post(USERS_URLS.RESET, data)
@@ -64,7 +72,7 @@ export default function ResetPass() {
         <input type="text"
         className="form-control" 
         placeholder="Otp" aria-label="seed" aria-describedby="basic-addon1"
-        {...register('seed', {required:'field is required'})
+        {...register('seed', {required:'seed is required'})
           }
         />
       </div>
@@ -83,7 +91,7 @@ export default function ResetPass() {
         type={isPasswordVisible ? "text" : "password"}
         className="form-control" 
         placeholder="New Password" aria-label="password" aria-describedby="basic-addon1"
-        {...register('password', {required:'field is required'})
+        {...register('password', PasswordValidation('password'))
           }/>
         
         <button className="input-group-text"
@@ -113,7 +121,11 @@ export default function ResetPass() {
         <input 
         type={isConfirmPasswordVisible ? "text" : "password"} className="form-control" 
         placeholder="Confirm New Password" aria-label="confirm password" aria-describedby="basic-addon1"
-        {...register('confirmPassword', {required:'field is required'})
+        {...register('confirmPassword',
+          { 
+            validate:(confirmPassword)=>{
+              return confirmPassword ===watch("password") ?"":"passwords don't match"
+            }}, PasswordValidation('password'))
           }/>
         
         <button
@@ -127,6 +139,7 @@ export default function ResetPass() {
           {e.preventDefault();}
           }
           id="basic-addon1">
+          {/* <span className="sr-only">{isConfirmPasswordVisible ? "hide password": "Show Password"}</span> */}
           <i className={` bi ${isConfirmPasswordVisible?"bi-eye fs-5": " bi-eye-slash fs-5"}`} aria-hidden='true'></i>
         </button>
                   

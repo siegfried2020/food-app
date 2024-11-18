@@ -9,6 +9,8 @@ export  const axiosInstance=axios.create({baseURL,
 // User URLs
 export const USERS_URLS={
   LOGIN:`/Users/Login`,
+  Register:`/Users/Register`,
+  CREATE:`/Users/Create`,
   RESET_REQUEST:`/Users/Reset/Request`,
   RESET:`/Users/Reset`,
   GET_USER:(id)=> `/Users/${id}`

@@ -23,9 +23,26 @@
   background-color: rgba(240, 255, 239, 1);
 }
 
+.upload-img{
+  text-align: center;
+  padding: 10px;
+  border: 2px solid #ccc;
+  border-radius: 8px;
+  background-color: white;
+}
+
+.sidebar-container{
+  background-color: #1F263E;
+  border-top-right-radius: 40px;
+  align-self: flex-start;
+  position: sticky;
+  left: 0;
+  top: 0;
+}
 .sidebar-container .ps-sidebar-container{
   background-color: #1F263E;
   height: 150vh;
+  border-top-right-radius: 40px;
 }
 
 .sidebar-container .ps-menu-button{
@@ -58,4 +75,15 @@
   border: solid red 2px;           
   padding: 10px;   
 }
-
+/* 
+.sr-only{
+  position: absolute;
+width: 1px;
+height: 1px;
+padding: 0;
+margin: -1px;
+overflow: hidden;
+clip: rect(0, 0, 0, 0);
+white-space: nowrap;
+border-width: 0;
+} */
