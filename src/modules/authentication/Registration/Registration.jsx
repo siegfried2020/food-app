@@ -174,7 +174,8 @@ export default function Registration() {
                 
       </div>
       <div className="upload-img">
-        <input type="file" onChange={handleChange} />
+        <input type="file" onChange={handleChange} 
+        {...register('profileImage')}/>
       </div>
       <div className="links d-flex justify-content-end">
           

@@ -1,9 +1,14 @@
 import {  Link, useParams } from "react-router-dom";
+import {useForm} from "react-hook-form";
 import styles from '../RecipeForm/RecipeForm.module.css'
 export default function RecipeForm() {
   const params =useParams();
-  console.log(params);
-  console.log(styles)
+  const { register, 
+    formState:{isSubmitting, errors}, 
+    handleSubmit}=useForm({mode:'onChange'})
+  
+  // console.log(params);
+  // console.log(styles);
   return(
     <main>
       
@@ -21,30 +26,32 @@ export default function RecipeForm() {
       </header>
       <form className={styles["form-wrapper"]}>
         <div className={styles["input-wrapper"]}>
-          <input placeholder="Recipe Name" className="form-control"/>
+          <input placeholder="Recipe Name" 
+          className="form-control"
+          {...register("name", {required:"This field is "})}/>
           <div>error</div>
         </div>
         
-        <div className={styles["form-wrapper"]}>
+        <div className={styles["input-wrapper"]}>
           <select className="form-control">
             <option value="">Tag</option>
           </select>
           <div>error</div>
         </div>
 
-        <div className={styles["form-wrapper"]}>
+        <div className={styles["input-wrapper"]}>
           <input placeholder="Price" className="form-control"/>
           <div>error</div>
         </div>
 
-        <div className={styles["form-wrapper"]}>
-          <select className={styles["input-wrapper"]}>
+        <div className={styles["input-wrapper"]}>
+          <select className="form-control">
             <option value="">Category</option>
           </select>
           <div>error</div>
         </div>
 
-        <div className="form-control">
+        <div className={styles["input-wrapper"]}>
           <textarea placeholder="Description" className="form-control"/>
           <div>error</div>
         </div>

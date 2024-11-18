@@ -11,16 +11,20 @@ export const USERS_URLS={
   LOGIN:`/Users/Login`,
   Register:`/Users/Register`,
   CREATE:`/Users/Create`,
+  DELETE:(id)=>`/Users/${id}`,
+  GET_USER:(id)=> `/Users/${id}`,
+  VERIFY:`/Users/verify`,
+  GET_CURRENT_USER:`/Users/currentUser`,
   RESET_REQUEST:`/Users/Reset/Request`,
-  RESET:`/Users/Reset`,
-  GET_USER:(id)=> `/Users/${id}`
+  RESET:`/Users/Reset`
 }
 
 // Category
 
 export const CATEGORY_URLS={
-  GET_CATEGORIES:`/Category/`,
   POST_CATEGORY:`/Category/`,
+  GET_CATEGORIES:`/Category/`,
+  GET_CATEGORY_BY_ID:(id)=>`/Category/${id}`,
   DELETE_CATEGORY:(id)=>`/Category/${id}`,
   UPDATE_CATEGORY:(id)=>`/Category/${id}`
 }
@@ -28,6 +32,9 @@ export const CATEGORY_URLS={
 // Recipe
 
 export const RECIPE_URLS={
+  CREATE_RECIPE:`/Recipe/`,
   GET_RECIPES:`/Recipe/`,
-  DELETE_RECIPE:(id)=>`/Recipe/${id}`
+  GET_RECIPE_BY_ID:(id)=>`/Recipe/${id}`,
+  DELETE_RECIPE:(id)=>`/Recipe/${id}`,
+  UPDATE_RECIPE:(id)=>`/Recipe/${id}`
 }
