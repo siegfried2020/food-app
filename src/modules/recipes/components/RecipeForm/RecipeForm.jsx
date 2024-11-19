@@ -1,12 +1,66 @@
 import {  Link, useParams } from "react-router-dom";
 import {useForm} from "react-hook-form";
 import styles from '../RecipeForm/RecipeForm.module.css'
+import { axiosInstance, CATEGORY_URLS, RECIPE_URLS, TAG_URLS } from "../../../../services/api/urls";
+import React, { useState } from "react";
+
 export default function RecipeForm() {
   const params =useParams();
-  const { register, 
+  const [tags, setTags]=React.useState([]);
+  const [categoriesList, setCategoriesList]=React.useState([]);
+
+  let { register, 
     formState:{isSubmitting, errors}, 
-    handleSubmit}=useForm({mode:'onChange'})
+  handleSubmit}=useForm({mode:'onChange'})
   
+  
+  const [file, setFile] = useState();
+  function handleChange(e) {
+    console.log(e.target.files);
+    setFile(URL.createObjectURL(e.target.files[0]));
+  }
+  
+  const onSubmitHandler=async(data)=>{
+    console.log(data);
+    try{
+      const response=await axiosInstance.post(RECIPE_URLS.CREATE_RECIPE, data);
+
+    }catch(error){
+      console.log(error)
+    }
+
+  }
+  let getTags= async()=>{
+    try{
+      let response=await axiosInstance.get(TAG_URLS.GET_TAGS);
+      console.log(response);
+      setTags(response?.data);
+      
+
+    }catch(error){
+      console.log(error);
+    }
+  };
+  
+  let getCategories= async()=>{
+    try{
+      let response=await axiosInstance.get(CATEGORY_URLS.GET_CATEGORIES,{params:{
+        pageSize:10, pageNumber:1
+      }})
+      // console.log(response.data.data)
+      setCategoriesList(response.data.data)
+      
+    }
+    catch(error){
+      console.log(error)
+    }
+    
+  };
+  React.useEffect(()=>{
+    getTags();
+    getCategories();
+  },[])
+  console.log(tags);
   // console.log(params);
   // console.log(styles);
   return(
@@ -24,41 +78,56 @@ export default function RecipeForm() {
           </svg>
         </Link>
       </header>
-      <form className={styles["form-wrapper"]}>
+      <form onSubmit={handleSubmit(onSubmitHandler)} className={styles["form-wrapper"]}>
         <div className={styles["input-wrapper"]}>
+          {errors?.name?.message &&<div className="text-danger">{errors?.name?.message}</div>}
           <input placeholder="Recipe Name" 
           className="form-control"
-          {...register("name", {required:"This field is "})}/>
-          <div>error</div>
+          {...register("name", {required:"This field is required"})}/>
         </div>
         
         <div className={styles["input-wrapper"]}>
-          <select className="form-control">
+          {errors.tagId?.message &&<div className="text-danger">{errors?.tagId?.message}</div>}
+          <select className="form-control" 
+          {...register("tagId", {required:"This field is required"})}>
             <option value="">Tag</option>
+            {tags.map((id, name)=>{
+              <option key={id} value={id}>{name}</option>})}
           </select>
-          <div>error</div>
         </div>
 
         <div className={styles["input-wrapper"]}>
-          <input placeholder="Price" className="form-control"/>
-          <div>error</div>
+          {errors.price?.message &&<div className="text-danger">{errors?.price?.message}</div>}
+          <input type="number" placeholder="Price" className="form-control"
+          {...register("price", {required:"This field is required", min:0})}/>
         </div>
 
         <div className={styles["input-wrapper"]}>
-          <select className="form-control">
+          {errors.categoriesIds?.message &&<div className="text-danger">{errors?.categoriesIds?.message}</div>}
+          <select {...register("categoriesIds", {required:"This field is required"})}
+           className="form-control">
             <option value="">Category</option>
           </select>
-          <div>error</div>
         </div>
 
         <div className={styles["input-wrapper"]}>
-          <textarea placeholder="Description" className="form-control"/>
-          <div>error</div>
+          {errors.description?.message &&<div className="text-danger">{errors?.description?.message}</div>}
+          <textarea placeholder="Description" className="form-control"
+          {...register("description", {required:"This field is required"})}/>
+        </div>
+
+        <div className={styles["input-wrapper"]}>
+          {errors.recipeImage?.message &&<div className="text-danger">{errors?.recipeImage?.message}</div>}
+          <input type="file" 
+          className="form-control"
+          onChange={handleChange} 
+          {...register("recipeImage")}/>
         </div>
 
         <div className={styles["actions-wrapper"]}>
-          <button className={styles["btn-primary"]}>Cancel</button>
-          <button className={styles["btn-primary"]}>Save</button>
+          <button className={styles["btn-cancel"]}>Cancel</button>
+          <button disabled={isSubmitting} className={styles["btn-primary"]}>
+            {isSubmitting? "Saving...":"Save"}</button>
           
         </div>
       </form>

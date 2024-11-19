@@ -28,6 +28,11 @@ export const CATEGORY_URLS={
   DELETE_CATEGORY:(id)=>`/Category/${id}`,
   UPDATE_CATEGORY:(id)=>`/Category/${id}`
 }
+// tags
+
+export const TAG_URLS={
+  GET_TAGS:`/tag/`
+}
 
 // Recipe
 

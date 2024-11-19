@@ -14,6 +14,8 @@
   }
 }
 
+
+
 .btn-primary{
   background-color: #009247;
   color: #ffff;
@@ -28,17 +30,43 @@
   gap: 12px;
 }
 
+.btn-primary:hover{
+  background-color: #0a5f33;
+  transition: all 0.5s;
+}
+
+.btn-cancel{
+  background-color: #ffffff;
+  color: #009247;
+  border: solid 1px #009247;
+  border-radius: 10px;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 18px;
+  padding-inline: 3rem;
+  padding-block: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.btn-cancel:hover{
+  background-color: #d2d2d2;
+  transition: all 0.5s;
+}
+
+
 .form-wrapper{
   margin-inline: 8.5rem;
   margin-block: 5.25rem;
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 1rem;
 
   .input-wrapper{
     width: 100%;
     input, select, textarea{
       width: 100%;
+      border: none;
       padding: 1rem;
       background-color: #E0E0E0;
       & ::placeholder{

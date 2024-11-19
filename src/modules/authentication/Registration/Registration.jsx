@@ -30,7 +30,7 @@ export default function Registration() {
     try{
       let response=await axiosInstance.post(USERS_URLS.Register, data);
       
-      navigate('/dashboard');
+      navigate('/login');
       // console.log(response)
     }catch(error){
       console.log(error.response.data.message)
@@ -49,7 +49,7 @@ export default function Registration() {
       <div className="row">
         <div className="col">
           
-          {errors.UserName && <span className="text-danger ">{errors.UserName.message}</span>}
+          {errors.userName && <span className="text-danger ">{errors.userName.message}</span>}
           <div className="input-group mb-3 my-2">
             
             <span className="input-group-text" id="basic-addon1">
@@ -59,7 +59,7 @@ export default function Registration() {
             <input type="text" 
             className="form-control" 
             placeholder="Enter your UserName" aria-label="Username" aria-describedby="basic-addon1"
-            {...register('UserName', {required:'User Name is required'})
+            {...register('userName', {required:'User Name is required'})
             }/>
           </div>
 
