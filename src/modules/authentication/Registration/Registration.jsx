@@ -133,7 +133,7 @@ export default function Registration() {
             <input type="text" 
             className="form-control" 
             placeholder="PhoneNumber" aria-label="phonNumber" aria-describedby="basic-addon1"
-            {...register('PhoneNumber', 
+            {...register('phoneNumber', 
               {pattern:{value:/^[0-9]+$/, message:"Invalid input"}}, 
               {required:'phone Number is required'})
             }/>
