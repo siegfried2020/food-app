@@ -20,6 +20,7 @@ import { useEffect, useState } from "react";
 import { jwtDecode } from "jwt-decode";
 import ProtectedRoute from "./modules/shared/components/PrtectedRoute/ProtectedRoute.jsx";
 import RecipeForm from "./modules/recipes/components/RecipeForm/RecipeForm.jsx";
+import { VerifyAccount } from "./modules/authentication/VerifyAccount/VerifyAccount.jsx";
 
 function App() {
   const [loginData, setLoginData]=useState(null);
@@ -30,11 +31,13 @@ function App() {
     //console.log(encodedToken);
   }
 
+  
+    useEffect(()=>{
+      if(localStorage.getItem('token'))
+        saveLoginData();
+    },[])
 
-  useEffect(()=>{
-    if(localStorage.getItem('token'))
-      saveLoginData();
-  },[])
+  
 
   const routes= createBrowserRouter([
     {
@@ -45,6 +48,7 @@ function App() {
         {index:true, element:<Login saveLoginData={saveLoginData}/>},
         {path:'login', element:<Login saveLoginData={saveLoginData}/>},
         {path:'register', element:<Registration/>},
+        {path:'verify', element:<VerifyAccount/>},
         {path:'forget-password', element:<ForgetPass/>},
         {path:'reset-password', element:<ResetPass/>},
       ]

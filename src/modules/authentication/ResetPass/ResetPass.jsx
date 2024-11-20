@@ -52,14 +52,12 @@ export default function ResetPass() {
         </span>
 
         <input
-        disabled={true} 
         type="email"
         className="form-control" 
         placeholder="E-mail" 
         aria-label="Email" 
         aria-describedby="basic-addon1"
-        {...register('email')
-        }/>
+        {...register('email', {required:"email is required"})}/>
       </div>
 
       {/* OTP */}
@@ -91,7 +89,7 @@ export default function ResetPass() {
         type={isPasswordVisible ? "text" : "password"}
         className="form-control" 
         placeholder="New Password" aria-label="password" aria-describedby="basic-addon1"
-        {...register('password', PasswordValidation('password'))
+        {...register('password', PasswordValidation("password"))
           }/>
         
         <button className="input-group-text"
@@ -122,10 +120,11 @@ export default function ResetPass() {
         type={isConfirmPasswordVisible ? "text" : "password"} className="form-control" 
         placeholder="Confirm New Password" aria-label="confirm password" aria-describedby="basic-addon1"
         {...register('confirmPassword',
-          { 
-            validate:(confirmPassword)=>{
-              return confirmPassword ===watch("password") ?"":"passwords don't match"
-            }}, PasswordValidation('password'))
+          { required:'password is required',
+            // validate:(confirmPassword)=>{
+            //   return confirmPassword ===watch("password") ?"":"passwords don't match"
+            // }
+            })
           }/>
         
         <button

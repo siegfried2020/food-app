@@ -35,6 +35,7 @@ export default function Login({saveLoginData}) {
     // }
     <>
         
+      <ToastContainer/>
       <div className="title my-4">
         <h3 className="fw-bold h5">Login</h3>
         <span className="text-body-tertiary">Welcome back! Please enter your details</span>
@@ -70,7 +71,7 @@ export default function Login({saveLoginData}) {
           placeholder="Password" 
           aria-label="password" 
           aria-describedby="basic-addon1"
-          {...register('password', {required:'field is required'})}/>
+          {...register('password', {required:'password is required'})}/>
         </div>
 
         <div className="links d-flex justify-content-between">

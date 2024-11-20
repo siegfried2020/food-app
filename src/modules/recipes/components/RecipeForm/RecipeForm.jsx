@@ -1,13 +1,14 @@
 import {  Link, useParams } from "react-router-dom";
 import {useForm} from "react-hook-form";
-import styles from '../RecipeForm/RecipeForm.module.css'
+import styles from '../RecipeForm/RecipeForm.module.css';
+import { ToastContainer, toast } from "react-toastify";
 import { axiosInstance, CATEGORY_URLS, RECIPE_URLS, TAG_URLS } from "../../../../services/api/urls";
 import React, { useState } from "react";
 
 export default function RecipeForm() {
   const params =useParams();
   const [tags, setTags]=React.useState([]);
-  const [categoriesList, setCategoriesList]=React.useState([]);
+  const [categories, setCategories]=React.useState([]);
 
   let { register, 
     formState:{isSubmitting, errors}, 
@@ -16,56 +17,80 @@ export default function RecipeForm() {
   
   const [file, setFile] = useState();
   function handleChange(e) {
+    
     console.log(e.target.files);
     setFile(URL.createObjectURL(e.target.files[0]));
-  }
+    
+}
   
   const onSubmitHandler=async(data)=>{
-    console.log(data);
-    try{
-      const response=await axiosInstance.post(RECIPE_URLS.CREATE_RECIPE, data);
+    //console.log(data);
+    const formData = new FormData();    
+    // formData.append('name', data?.name);
+    // formData.append('description', data?.description);
+    // formData.append('price', data?.price);
+    // formData.append('tagId', data?.tagId);
+    // formData.append('recipeImage', data?.recipeImage[0]);
+    // formData.append('categoriesIds', data?.categoriesIds);
+    for(const key in data){
+      if(key !== "recipeImage"){
+        formData.append(key, data?.[key]);
+      }else{
+        formData.append('recipeImage', data?.[key]?.[0])
+      }
+    }
 
+    try{
+      const response=await axiosInstance.post(RECIPE_URLS.CREATE_RECIPE, formData);
+      toast.success("recipe added");
     }catch(error){
+      toast.error("failed to add recipe");
       console.log(error)
     }
 
   }
-  let getTags= async()=>{
-    try{
-      let response=await axiosInstance.get(TAG_URLS.GET_TAGS);
-      console.log(response);
-      setTags(response?.data);
-      
-
-    }catch(error){
-      console.log(error);
-    }
-  };
   
-  let getCategories= async()=>{
-    try{
-      let response=await axiosInstance.get(CATEGORY_URLS.GET_CATEGORIES,{params:{
-        pageSize:10, pageNumber:1
-      }})
-      // console.log(response.data.data)
-      setCategoriesList(response.data.data)
-      
-    }
-    catch(error){
-      console.log(error)
-    }
-    
-  };
+  const recipeId=params.recipeId;
   React.useEffect(()=>{
+    let getTags= async()=>{
+      try{
+        let response=await axiosInstance.get(TAG_URLS.GET_TAGS);
+        console.log(response);
+        setTags(response?.data);
+        
+  
+      }catch(error){
+        console.log(error);
+      }
+    };
+    let getCategories= async()=>{
+      try{
+        let response=await axiosInstance.get(CATEGORY_URLS.GET_CATEGORIES,{params:{
+          pageSize:10, pageNumber:1}})
+        // console.log(response.data.data)
+        setCategories(response.data.data)
+        
+      }
+      catch(error){
+        console.log(error)
+      }
+      
+    };
     getTags();
     getCategories();
+    if(recipeId !=="new-recipe"){
+      const getRecipeById= async()=>{
+        const response= await axiosInstance.get(RECIPE_URLS.GET_RECIPE_BY_ID(recipeId))
+        console.log(response)
+      }
+    }
   },[])
   console.log(tags);
   // console.log(params);
   // console.log(styles);
   return(
     <main>
-      
+      <ToastContainer/>
       <header className={styles["header-wrapper"]}>
         <div className={styles["content-wrapper"]}>
           <h3>Fill the <span>Recipes</span>!</h3>
@@ -91,41 +116,48 @@ export default function RecipeForm() {
           <select className="form-control" 
           {...register("tagId", {required:"This field is required"})}>
             <option value="">Tag</option>
-            {tags.map((id, name)=>{
-              <option key={id} value={id}>{name}</option>})}
+            {tags.map(item=>{
+              return <option key={item.id} value={item.id}>
+                {item.name}</option>
+              })}
           </select>
         </div>
 
         <div className={styles["input-wrapper"]}>
           {errors.price?.message &&<div className="text-danger">{errors?.price?.message}</div>}
           <input type="number" placeholder="Price" className="form-control"
-          {...register("price", {required:"This field is required", min:0})}/>
+          {...register("price", {required:"phone number is required", min:0})}/>
         </div>
 
         <div className={styles["input-wrapper"]}>
           {errors.categoriesIds?.message &&<div className="text-danger">{errors?.categoriesIds?.message}</div>}
           <select {...register("categoriesIds", {required:"This field is required"})}
            className="form-control">
-            <option value="">Category</option>
+            <option>Category</option>
+            {categories.map(item=>{
+              return <option key={item.id} value={item.id}>
+                {item.name}</option>
+              })}
           </select>
         </div>
 
         <div className={styles["input-wrapper"]}>
           {errors.description?.message &&<div className="text-danger">{errors?.description?.message}</div>}
           <textarea placeholder="Description" className="form-control"
-          {...register("description", {required:"This field is required"})}/>
+          {...register("description", {required:"description is required"})}/>
         </div>
 
         <div className={styles["input-wrapper"]}>
           {errors.recipeImage?.message &&<div className="text-danger">{errors?.recipeImage?.message}</div>}
-          <input type="file" 
+          <input type="file"
           className="form-control"
           onChange={handleChange} 
           {...register("recipeImage")}/>
+          <img src={file} />
         </div>
 
         <div className={styles["actions-wrapper"]}>
-          <button className={styles["btn-cancel"]}>Cancel</button>
+          <Link to="../recipes" className={styles["btn-cancel"]}>Cancel</Link>
           <button disabled={isSubmitting} className={styles["btn-primary"]}>
             {isSubmitting? "Saving...":"Save"}</button>
           

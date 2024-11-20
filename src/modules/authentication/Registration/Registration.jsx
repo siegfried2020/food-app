@@ -5,6 +5,7 @@ import { EMAIL_VALIDATION, PasswordValidation } from "../../../services/api/vali
 import { axiosInstance, USERS_URLS } from "../../../services/api/urls";
 
 import React, { useState } from "react";
+import { toast, ToastContainer } from "react-toastify";
 
 export default function Registration() {
   let navigate=useNavigate()
@@ -15,8 +16,9 @@ export default function Registration() {
       console.log(e.target.files);
       setFile(URL.createObjectURL(e.target.files[0]));
   }
-  let {register, watch, trigger, formState:{isSubmitting, errors}, 
-  handleSubmit}=useForm({defaultValues:{email:location.state}, mode:"onChange"});
+  let {register, watch, trigger, 
+    formState:{isSubmitting, errors}, 
+  handleSubmit}=useForm({mode:"onChange"});
 
   const password=watch("password");
   const confirmPassword=watch("confirmPassword");
@@ -27,12 +29,29 @@ export default function Registration() {
   }, [password, confirmPassword, trigger])
   
   const onSubmit= async (data)=>{
+    const formData = new FormData();    
+    // formData.append('userName', data?.userName);
+    // formData.append('country', data?.country);
+    // formData.append('password', data?.price);
+    // formData.append('email', data?.tagId);
+    // formData.append('PhoneNumber', data?.PhoneNumber);
+    // formData.append('confirmPassword', data?.confirmPassword);
+    // formData.append('profileImage', data?.profileImage[0]);
+    
+    for(const key in data){
+      if(key !== "profileImage"){
+        formData.append(key, data?.[key]);
+      }else{
+        formData.append('profileImage', data?.[key]?.[0])
+      }
+    }
     try{
-      let response=await axiosInstance.post(USERS_URLS.Register, data);
-      
-      navigate('/login');
+      let response=await axiosInstance.post(USERS_URLS.Register, formData);
+      toast.success("registration sucssess");
+      navigate('/verify', {state: data.email});
       // console.log(response)
     }catch(error){
+      toast.error("registration failed");
       console.log(error.response.data.message)
     }
     
@@ -40,7 +59,7 @@ export default function Registration() {
   }
   return (
   <div>
-    
+    <ToastContainer/>
     <div className="title my-4">
       <h3 className="fw-bold h5">Register</h3>
       <span className="text-body-tertiary">welcome back! Please enter your details</span>
@@ -49,6 +68,7 @@ export default function Registration() {
       <div className="row">
         <div className="col">
           
+          {/* User Name */}
           {errors.userName && <span className="text-danger ">{errors.userName.message}</span>}
           <div className="input-group mb-3 my-2">
             
@@ -63,6 +83,7 @@ export default function Registration() {
             }/>
           </div>
 
+          {/* country */}
           {errors.country && <span className="text-danger ">{errors.country.message}</span>}
           <div className="input-group mb-3 my-2">
             
@@ -76,7 +97,8 @@ export default function Registration() {
             {...register('country', {required:'Country name is required'})
             }/>
           </div>
-
+          
+          {/* password */}
           {errors.password && <span className="text-danger ">{errors.password.message}</span>}
           <div className="input-group mb-3 my-2">
             
@@ -103,12 +125,13 @@ export default function Registration() {
             <i className={` bi ${isPasswordVisible?"bi-eye fs-5": " bi-eye-slash fs-5"}`} aria-hidden='true'></i>
           </button>
              
-        </div>
+          </div>
 
         </div>
 
         <div className="col">
-          
+
+          {/* email */}
           {errors.email && <span className="text-danger ">{errors.email.message}</span>}
           <div className="input-group mb-3 my-2">
             
@@ -123,6 +146,7 @@ export default function Registration() {
             }/>
           </div>
 
+          {/* PhoneNumber*/}
           {errors.phoneNumber && <span className="text-danger ">{errors.phoneNumber.message}</span>}
           <div className="input-group mb-3 my-2">
             
@@ -130,15 +154,15 @@ export default function Registration() {
               <i className="bi bi-phone fs-5" aria-hidden='true'></i>
             </span>
 
-            <input type="text" 
+            <input type="number"
             className="form-control" 
             placeholder="PhoneNumber" aria-label="phonNumber" aria-describedby="basic-addon1"
             {...register('phoneNumber', 
-              {pattern:{value:/^[0-9]+$/, message:"Invalid input"}}, 
-              {required:'phone Number is required'})
+              {required:'phone Number is required,', min:0})
             }/>
           </div>
-
+          
+          {/* confirmPassword */}
           {errors.confirmPassword && <span className="text-danger ">{errors.confirmPassword.message}</span>}
           <div className="input-group mb-3 my-2">
             
@@ -149,10 +173,8 @@ export default function Registration() {
             <input type={isConfirmPasswordVisible ? "text" : "password"} 
             className="form-control" 
             placeholder="Confirm-password" aria-label="confirm-password" aria-describedby="basic-addon1"
-            {...register('confirmPassword',{ 
-              validate:(confirmPassword)=>{
-                return confirmPassword ===watch("password") ?"password is required":"passwords don't match"
-              }}, PasswordValidation('password'))
+            {...register('confirmPassword',{ required:'password is required',
+              } )
             }/>
 
             <button
