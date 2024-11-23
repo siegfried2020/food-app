@@ -1,19 +1,24 @@
-import {  Link, useParams } from "react-router-dom";
+import {  Link, useNavigate, useParams } from "react-router-dom";
 import {useForm} from "react-hook-form";
 import styles from '../RecipeForm/RecipeForm.module.css';
 import { ToastContainer, toast } from "react-toastify";
 import { axiosInstance, CATEGORY_URLS, RECIPE_URLS, TAG_URLS } from "../../../../services/api/urls";
 import React, { useState } from "react";
+import useBeforeUnload from "../../../../hooks/useBeforeUnload";
 
 export default function RecipeForm() {
   const params =useParams();
   const [tags, setTags]=React.useState([]);
   const [categories, setCategories]=React.useState([]);
-
-  let { register, 
-    formState:{isSubmitting, errors}, 
-  handleSubmit}=useForm({mode:'onChange'})
+  const navigate=useNavigate();
   
+  let { register, setValue, getValues,
+    formState:{isSubmitting, errors}, 
+    handleSubmit}=useForm({mode:'onChange'})
+    
+    useBeforeUnload(()=>{
+      localStorage.setItem("recipeData", JSON.stringify(getValues))
+    })
   
   const [file, setFile] = useState();
   function handleChange(e) {
@@ -41,8 +46,11 @@ export default function RecipeForm() {
     }
 
     try{
-      const response=await axiosInstance.post(RECIPE_URLS.CREATE_RECIPE, formData);
+      const response=await axiosInstance[isNewRecipe ? "post":"put"](
+        (isNewRecipe?RECIPE_URLS.CREATE_RECIPE:RECIPE_URLS.UPDATE_RECIPE(recipeId)), formData);
+      console.log(response);
       toast.success("recipe added");
+      navigate("../recipes")
     }catch(error){
       toast.error("failed to add recipe");
       console.log(error)
@@ -51,6 +59,8 @@ export default function RecipeForm() {
   }
   
   const recipeId=params.recipeId;
+  const isNewRecipe=recipeId ==="new-recipe";
+
   React.useEffect(()=>{
     let getTags= async()=>{
       try{
@@ -65,8 +75,7 @@ export default function RecipeForm() {
     };
     let getCategories= async()=>{
       try{
-        let response=await axiosInstance.get(CATEGORY_URLS.GET_CATEGORIES,{params:{
-          pageSize:10, pageNumber:1}})
+        let response=await axiosInstance.get(CATEGORY_URLS.GET_CATEGORIES)
         // console.log(response.data.data)
         setCategories(response.data.data)
         
@@ -76,18 +85,42 @@ export default function RecipeForm() {
       }
       
     };
-    getTags();
-    getCategories();
-    if(recipeId !=="new-recipe"){
-      const getRecipeById= async()=>{
-        const response= await axiosInstance.get(RECIPE_URLS.GET_RECIPE_BY_ID(recipeId))
-        console.log(response)
+    
+    (async ()=>{
+      
+      await getTags();
+      await getCategories();
+      
+      if(!isNewRecipe){
+        const getRecipeById= async()=>{
+          const response= await axiosInstance.get(RECIPE_URLS.GET_RECIPE_BY_ID(recipeId))
+          console.log(response);
+          const recipe= response?.data;
+          setValue("name", recipe?.name);
+          setValue("description", recipe?.description);
+          setValue("price", recipe?.price);
+          setValue("categoriesIds", recipe?.category?.[0]?.id);
+          setValue("tagId", recipe?.tag?.id);
+          setValue("name", recipe?.name);
+          
+        }
+        getRecipeById()
       }
-    }
-  },[])
+    })();
+
+  },[recipeId, setValue])
   console.log(tags);
   // console.log(params);
   // console.log(styles);
+  React.useEffect(()=>{
+    const beforeUnloadHandler=(e)=>{
+      e.preventDefault
+    };
+    window.addEventListener("beforeunload", beforeUnloadHandler);
+    return()=>{
+      window.removeEventListener("beforeunload", beforeUnloadHandler);
+    }
+  },[])
   return(
     <main>
       <ToastContainer/>
@@ -157,7 +190,7 @@ export default function RecipeForm() {
         </div>
 
         <div className={styles["actions-wrapper"]}>
-          <Link to="../recipes" className={styles["btn-cancel"]}>Cancel</Link>
+          <Link to="../recipes" type="button" className={styles["btn-cancel"]}>Cancel</Link>
           <button disabled={isSubmitting} className={styles["btn-primary"]}>
             {isSubmitting? "Saving...":"Save"}</button>
           

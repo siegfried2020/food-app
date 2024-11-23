@@ -10,7 +10,8 @@ import { EMAIL_VALIDATION } from "../../../services/api/validations";
 
 export default function Login({saveLoginData}) {
 
-  let navigate=useNavigate()
+  let navigate=useNavigate();
+  const [isPasswordVisible, setIsPasswordVisible]=React.useState(false);
   let {register, formState:{errors}, handleSubmit}=useForm();
   const onSubmit= async (data)=>{
     try{
@@ -66,12 +67,25 @@ export default function Login({saveLoginData}) {
             <i className="bi bi-key fs-5" aria-hidden='true'></i>
           </span>
 
-          <input type="password" 
+          <input type={isPasswordVisible ? "text" : "password"}
           className="form-control" 
           placeholder="Password" 
           aria-label="password" 
           aria-describedby="basic-addon1"
           {...register('password', {required:'password is required'})}/>
+          <button  
+          className="input-group-text"
+          onClick={()=>{setIsPasswordVisible((prev)=>!prev)}}
+          type="button"
+            onMouseDown={(e)=>{
+              e.preventDefault();
+            }}
+            onMouseUp={(e)=>{
+              e.preventDefault();
+            }}
+            >
+            <i className={` bi ${isPasswordVisible?"bi-eye fs-5": " bi-eye-slash fs-5"}`} aria-hidden='true'></i>
+          </button>
         </div>
 
         <div className="links d-flex justify-content-between">

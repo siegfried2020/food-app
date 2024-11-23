@@ -11,10 +11,11 @@ export const USERS_URLS={
   LOGIN:`/Users/Login`,
   Register:`/Users/Register`,
   CREATE:`/Users/Create`,
-  DELETE:(id)=>`/Users/${id}`,
+  DELETE_USER:(id)=>`/Users/${id}`,
   GET_USER:(id)=> `/Users/${id}`,
   VERIFY:`/Users/verify`,
   GET_CURRENT_USER:`/Users/currentUser`,
+  GET_USERS_LIST:`/Users/`,
   RESET_REQUEST:`/Users/Reset/Request`,
   RESET:`/Users/Reset`
 }

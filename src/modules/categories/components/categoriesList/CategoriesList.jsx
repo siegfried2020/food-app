@@ -11,18 +11,21 @@ import { ToastContainer, toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import AddConfirmation  from "../../../shared/components/AddConfirmation/AddConfirmation";
 import  EditCategory from "../EditCategory/EditCategory";
+import useCategories from "../hooks/useCategories";
 
 export default function CategoriesList() {
-  const [categoriesList, setCategoriesList]=useState([]);
-  const [selectedId, setSelectedId]=useState(0);
+  //const [categoriesList, setCategoriesList]=useState([]);
+  const categoriesQuery= useCategories();
   
+  const [selectedId, setSelectedId]=useState(0);
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = (id) =>{ 
     setSelectedId(id);
     setShow(true);
   };
-
+  
+  console.log(categoriesQuery);
   // Add Category
   const [showAdd, setShowAdd]=useState(false);
   const handleCloseAdd = () => setShowAdd(false);
@@ -39,28 +42,29 @@ export default function CategoriesList() {
   };
 
 // "https://upskilling-egypt.com:3006/api/v1/Category/?pageSize=10&pageNumber=1"
-  let getCategories= async()=>{
-    try{
-      let response=await axiosInstance.get(CATEGORY_URLS.GET_CATEGORIES,{params:{
-        pageSize:10, pageNumber:1
-      }})
-      // console.log(response.data.data)
-      setCategoriesList(response.data.data)
+  // let getCategories= async()=>{
+  //   try{
+  //     let response=await axiosInstance.get(CATEGORY_URLS.GET_CATEGORIES,
+  //     )
+  //     // console.log(response.data.data)
+  //     setCategoriesList(response.data.data)
       
-    }
-    catch(error){
-      console.log(error)
-    }
+  //   }
+  //   catch(error){
+  //     console.log(error)
+  //   }
     
-  };
+  // };
+
 
 
   let createCategory= async(data)=>{
     try{
       let response=await axiosInstance.post(CATEGORY_URLS.POST_CATEGORY,data)
-      toast.success("Category added")
-      console.log(response)
-      getCategories()
+      toast.success("Category added");
+      console.log(response);
+      categoriesQuery.triggerCategories;
+      //getCategories()
     }
     catch(error){
       toast.error("failed to add category")
@@ -73,8 +77,10 @@ export default function CategoriesList() {
     try{
       let response=await axiosInstance.put(CATEGORY_URLS.UPDATE_CATEGORY(selectedId),data)
       toast.success("Category edited")
+      categoriesQuery.triggerCategories;
+      
       //console.log(response.data.data)
-      getCategories()
+      // getCategories()
     }
     catch(error){
       toast.error(error)
@@ -87,8 +93,10 @@ export default function CategoriesList() {
   let deleteCategory=()=>{
     try{
       let response=axiosInstance.delete(CATEGORY_URLS.DELETE_CATEGORY(selectedId));
+      categoriesQuery.triggerCategories;
+      
       //console.log(response);
-      getCategories()
+      // getCategories()
     }catch(error){
       console.log(error)
     }
@@ -96,9 +104,9 @@ export default function CategoriesList() {
     handleClose();
   }
 
-  useEffect(()=>{
-    getCategories()
-  },[])
+  // useEffect(()=>{
+  //   categoriesQuery.categories;
+  // },[])
   return (
     <div className="w-100">
       <Header title={"Categories Item"} 
@@ -147,7 +155,7 @@ export default function CategoriesList() {
       </div>
       <div className="p-4">
       <ToastContainer/>
-      {categoriesList.length > 0?
+      {categoriesQuery?.categories?.data?.length > 0?
         <table className="table table-white table-striped">
           <thead className="table-header table-secondary table-borderless">
             <tr >
@@ -157,7 +165,7 @@ export default function CategoriesList() {
             </tr>
           </thead>
           <tbody>
-            {categoriesList.map(category=>
+            {categoriesQuery?.categories?.data?.map(category=>
             <tr key={category.id}>
               <td>{category.name}</td>
               <td>{category.creationDate}</td>
@@ -176,7 +184,33 @@ export default function CategoriesList() {
           </tbody>
         </table>:<NoData/>}
       </div>
-      
+      {/* <nav aria-label="Page navigation example">
+        <ul className="pagination">
+          <li className="page-item">
+            <a className="page-link" href="#" aria-label="Previous">
+              <span aria-hidden="true">&laquo;</span>
+              <span className="sr-only">Previous</span>
+            </a>
+          </li>
+          {arrayOfPages.map((pageNo)=>(
+            
+            <li className="page-item" key={pageNo} 
+            onClick={()=>getRecipes(pageNo, 3)}>
+              <a className="page-link" href="#">
+                {pageNo}
+              </a>
+            </li>))
+          }
+          
+          
+          <li className="page-item">
+            <a className="page-link" href="#" aria-label="Next">
+              <span aria-hidden="true">&raquo;</span>
+              <span className="sr-only">Next</span>
+            </a>
+          </li>
+        </ul>
+        </nav> */}
     </div>
   );
 }
