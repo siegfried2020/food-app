@@ -1,6 +1,6 @@
 import Header from "../../../shared/components/Header/Header";
 import axios from "axios";
-import {React, useEffect, useState } from "react";
+import {React, useContext, useEffect, useState } from "react";
 import Modal from 'react-bootstrap/Modal';
 import sora from "../../../../assets/images/sora.png";
 
@@ -8,9 +8,12 @@ import DeleteConfirmation from "../../../shared/components/DeleteConfirmation/De
 import { axiosInstance, CATEGORY_URLS, imgbaseURL, RECIPE_URLS, TAG_URLS } from "../../../../services/api/urls";
 import NoData from "../../../shared/components/NoData/NoData";
 import { Link } from "react-router-dom";
+import { AuthContext } from "../../../../context/AuthContext";
 
 export default function RecipeList() {
   
+  let {loginData}=useContext(AuthContext);
+
   const [tags, setTags]=useState([]);
   const [categories, setCategories]=useState([]);
   const [recipesList, setRecipesList]=useState([]);
@@ -117,7 +120,10 @@ export default function RecipeList() {
           <p>You can check all the details</p>
         </div>
         <div>
-        <Link to="new-recipe" className="btn btn-success">Add new Recipe</Link>
+          {loginData?.userGroup != 'SystemUser' ?(
+            <Link to="new-recipe" className="btn btn-success">Add new Recipe</Link>
+          ):""}
+        
         </div>
       </div>
       <div></div>
@@ -164,7 +170,8 @@ export default function RecipeList() {
                 <th scope="col">Description</th>
                 <th scope="col">tag</th>
                 <th scope="col">category</th>
-                <th scope="col">Actions</th>
+                <th scope="col">Actions</th> 
+                
                 
               </tr>
             </thead>
@@ -178,16 +185,23 @@ export default function RecipeList() {
                 </td>
                 <td>{recipe.price}</td>
                 <td>{recipe.description}</td>
-                <td>{recipe.tag.id}</td>
+                <td>{recipe.tag.name}</td>
                 <td>{recipe.category?.[0]?.name}</td>
                 
-                <td>
-                  <i className="bi bi-trash-fill text-danger mx-3 fs-5" 
-                  onClick={()=>handleShow(recipe.id)} aria-hidden="true"></i>
-                  <Link to={`${recipe?.id}`}>
-                  <i className="bi bi-pencil-square text-warning fs-5" aria-hidden="true"></i>
-                  </Link>
-                </td>
+                {loginData?.userGroup != 'SystemUser' ? (
+                  <td>
+                    <i className="bi bi-trash-fill text-danger fs-5"
+                    onClick={()=>handleShow(recipe.id)} aria-hidden="true"></i>
+
+                    <Link to={`${recipe?.id}`}>
+                      <i className="bi bi-pencil-square text-warning fs-5" aria-hidden="true"></i>
+                    </Link>
+                  </td>):<td>
+                  <i className="bi bi-heart-fill text-danger "
+                    onClick={()=>handleShow(recipe.id)} aria-hidden="true"></i>
+                    </td>}
+                
+                
               </tr>
 
               )}

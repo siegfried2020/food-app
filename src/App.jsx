@@ -21,21 +21,10 @@ import { jwtDecode } from "jwt-decode";
 import ProtectedRoute from "./modules/shared/components/PrtectedRoute/ProtectedRoute.jsx";
 import RecipeForm from "./modules/recipes/components/RecipeForm/RecipeForm.jsx";
 import { VerifyAccount } from "./modules/authentication/VerifyAccount/VerifyAccount.jsx";
+import Favourites from "./modules/Favorites/component/Favourites.jsx";
 
 function App() {
-  const [loginData, setLoginData]=useState(null);
-  let saveLoginData=()=>{
-    let decodedToken= localStorage.getItem('token');
-    let encodedToken= jwtDecode(decodedToken);
-    setLoginData(encodedToken);
-    //console.log(encodedToken);
-  }
-
   
-    useEffect(()=>{
-      if(localStorage.getItem('token'))
-        saveLoginData();
-    },[])
 
   
 
@@ -45,8 +34,8 @@ function App() {
       element:<AuthLayout/>,
       errorElement:<NotFound/>,
       children:[
-        {index:true, element:<Login saveLoginData={saveLoginData}/>},
-        {path:'login', element:<Login saveLoginData={saveLoginData}/>},
+        {index:true, element:<Login />},
+        {path:'login', element:<Login />},
         {path:'register', element:<Registration/>},
         {path:'verify', element:<VerifyAccount/>},
         {path:'forget-password', element:<ForgetPass/>},
@@ -56,15 +45,16 @@ function App() {
     {
       path:'dashboard',
       element:(
-      <ProtectedRoute loginData={loginData}>
-        <MasterLayout loginData={loginData}/>
+      <ProtectedRoute >
+        <MasterLayout />
       </ProtectedRoute>),
       errorElement:<NotFound/>,
       children:[
-        {index:true, element:<Dashboard loginData={loginData}/>},
-        {path:'recipes', element:<RecipeList loginData={loginData}/>},
+        {index:true, element:<Dashboard />},
+        {path:'recipes', element:<RecipeList />},
         {path:'recipes/:recipeId', element:<RecipeForm/>},
         {path:'recipe-data', element:<RecipeData />},
+        {path:'favourites', element:<Favourites />},
         {path:'categories', element:<CategoriesList />},
         {path:'category-data', element:<CategoryData/>},
         {path:'users', element:<UsersList/>},

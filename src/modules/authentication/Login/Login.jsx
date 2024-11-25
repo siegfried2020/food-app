@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import logo from "../../../assets/images/logo.png";
 import { Link, useNavigate } from "react-router-dom";
 import {useForm} from "react-hook-form";
@@ -7,9 +7,11 @@ import 'react-toastify/dist/ReactToastify.css';
 import axios from "axios";
 import { axiosInstance, USERS_URLS } from "../../../services/api/urls";
 import { EMAIL_VALIDATION } from "../../../services/api/validations";
+import { AuthContext } from "../../../context/AuthContext";
 
-export default function Login({saveLoginData}) {
-
+export default function Login() {
+  
+  let {saveLoginData}=useContext(AuthContext);
   let navigate=useNavigate();
   const [isPasswordVisible, setIsPasswordVisible]=React.useState(false);
   let {register, formState:{errors}, handleSubmit}=useForm();
@@ -36,7 +38,6 @@ export default function Login({saveLoginData}) {
     // }
     <>
         
-      <ToastContainer/>
       <div className="title my-4">
         <h3 className="fw-bold h5">Login</h3>
         <span className="text-body-tertiary">Welcome back! Please enter your details</span>
