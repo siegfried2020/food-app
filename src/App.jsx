@@ -36,6 +36,7 @@ function App() {
       children:[
         {index:true, element:<Login />},
         {path:'login', element:<Login />},
+        {path:'changePassword', element:<ChangePass/>},
         {path:'register', element:<Registration/>},
         {path:'verify', element:<VerifyAccount/>},
         {path:'forget-password', element:<ForgetPass/>},

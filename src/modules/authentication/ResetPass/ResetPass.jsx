@@ -124,7 +124,7 @@ export default function ResetPass() {
             // validate:(confirmPassword)=>{
             //   return confirmPassword ===watch("password") ?"":"passwords don't match"
             // }
-            })
+            },PasswordValidation('password'))
           }/>
         
         <button

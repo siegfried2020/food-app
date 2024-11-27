@@ -5,7 +5,7 @@ import Modal from 'react-bootstrap/Modal';
 import sora from "../../../../assets/images/sora.png";
 
 import DeleteConfirmation from "../../../shared/components/DeleteConfirmation/DeleteConfirmation";
-import { axiosInstance, CATEGORY_URLS, imgbaseURL, RECIPE_URLS, TAG_URLS } from "../../../../services/api/urls";
+import { axiosInstance, CATEGORY_URLS, imgbaseURL, RECIPE_URLS, TAG_URLS, USER_RECIPE } from "../../../../services/api/urls";
 import NoData from "../../../shared/components/NoData/NoData";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../../../../context/AuthContext";
@@ -44,6 +44,20 @@ export default function RecipeList() {
       console.log(error)
     }
   };
+
+  let addToFav= async(id)=>{
+    
+    try{
+      let response=await axiosInstance.post(USER_RECIPE.ADD_TO_FAV,
+        {recipeId: id})
+      
+    }catch(error){
+      console.log(error);
+    }
+  }
+
+
+
 // `https://upskilling-egypt.com:3006/api/v1/Recipe/${selectedId}`
   let deleteRecipe=()=>{
     try{
@@ -198,7 +212,7 @@ export default function RecipeList() {
                     </Link>
                   </td>):<td>
                   <i className="bi bi-heart-fill text-danger "
-                    onClick={()=>handleShow(recipe.id)} aria-hidden="true"></i>
+                    onClick={()=>addToFav(recipe.id)} aria-hidden="true"></i>
                     </td>}
                 
                 
@@ -211,7 +225,7 @@ export default function RecipeList() {
         <nav aria-label="Page navigation example">
         <ul className="pagination">
           <li className="page-item">
-            <a className="page-link" href="#" aria-label="Previous">
+            <a className="page-link" aria-label="Previous">
               <span aria-hidden="true">&laquo;</span>
               <span className="sr-only">Previous</span>
             </a>
@@ -220,7 +234,7 @@ export default function RecipeList() {
             
             <li className="page-item" key={pageNo} 
             onClick={()=>getRecipes(pageNo, 3)}>
-              <a className="page-link" href="#">
+              <a className="page-link" >
                 {pageNo}
               </a>
             </li>))
@@ -228,7 +242,7 @@ export default function RecipeList() {
           
           
           <li className="page-item">
-            <a className="page-link" href="#" aria-label="Next">
+            <a className="page-link"  aria-label="Next">
               <span aria-hidden="true">&raquo;</span>
               <span className="sr-only">Next</span>
             </a>

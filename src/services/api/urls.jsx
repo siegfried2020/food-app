@@ -14,6 +14,7 @@ export const USERS_URLS={
   DELETE_USER:(id)=>`/Users/${id}`,
   GET_USER:(id)=> `/Users/${id}`,
   VERIFY:`/Users/verify`,
+  CHANGE_PASSWORD:`/Users/ChangePassword`,
   GET_CURRENT_USER:`/Users/currentUser`,
   GET_USERS_LIST:`/Users/`,
   RESET_REQUEST:`/Users/Reset/Request`,
@@ -43,4 +44,12 @@ export const RECIPE_URLS={
   GET_RECIPE_BY_ID:(id)=>`/Recipe/${id}`,
   DELETE_RECIPE:(id)=>`/Recipe/${id}`,
   UPDATE_RECIPE:(id)=>`/Recipe/${id}`
+}
+
+// User Recipe
+
+export const USER_RECIPE={
+  GET_USER_RECIPE:`/userRecipe`,
+  ADD_TO_FAV:`/userRecipe`,
+  DELETE_USER_RECIPE:(id)=>`/userRecipe/${id}`,
 }
