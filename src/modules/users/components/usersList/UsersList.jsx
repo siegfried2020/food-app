@@ -42,7 +42,7 @@ export default function UsersList() {
   }
 
   useEffect(()=>{
-    getUsers(3,10);
+    getUsers(5,40);
   },[])
 
   return (

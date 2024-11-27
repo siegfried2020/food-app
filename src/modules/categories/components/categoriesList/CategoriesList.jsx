@@ -63,7 +63,7 @@ export default function CategoriesList() {
       let response=await axiosInstance.post(CATEGORY_URLS.POST_CATEGORY,data)
       toast.success("Category added");
       console.log(response);
-      categoriesQuery.trigger();
+      categoriesQuery.trigger;
       //getCategories()
     }
     catch(error){
@@ -77,7 +77,7 @@ export default function CategoriesList() {
     try{
       let response=await axiosInstance.put(CATEGORY_URLS.UPDATE_CATEGORY(selectedId),data)
       toast.success("Category edited")
-      categoriesQuery.trigger();
+      categoriesQuery.trigger;
       
       //console.log(response.data.data)
       // getCategories()
@@ -93,7 +93,7 @@ export default function CategoriesList() {
   let deleteCategory=()=>{
     try{
       let response=axiosInstance.delete(CATEGORY_URLS.DELETE_CATEGORY(selectedId));
-      categoriesQuery.trigger();
+      categoriesQuery.trigger;
       
       //console.log(response);
       // getCategories()

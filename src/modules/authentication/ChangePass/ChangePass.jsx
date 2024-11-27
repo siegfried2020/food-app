@@ -3,7 +3,7 @@ import React from "react";
 import {useForm} from "react-hook-form";
 import { axiosInstance, USERS_URLS } from "../../../services/api/urls";
 
-import { EMAIL_VALIDATION } from "../../../services/api/validations";
+import { EMAIL_VALIDATION, PasswordValidation } from "../../../services/api/validations";
 export default function ChangePass() {
   
   let navigate=useNavigate();
