@@ -19,6 +19,7 @@ export default function RecipeList() {
   const [recipesList, setRecipesList]=useState([]);
   const [arrayOfPages, setArrayOfPages]=useState([]);
   const [selectedId, setSelectedId]=useState(0);
+  const [currentPage, setCurrentPage]=useState(1);
   const [show, setShow] = useState(false);
   const [nameValue, setNameValue]=useState('');
   const [tagValue, setTagValue]=useState('');

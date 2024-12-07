@@ -21,12 +21,11 @@ export default function RecipeForm() {
     })
   
   const [file, setFile] = useState();
+  
   function handleChange(e) {
-    
     console.log(e.target.files);
-    setFile(URL.createObjectURL(e.target.files[0]));
-    
-}
+    setFile(URL.createObjectURL(e.target.files[0]));  
+  }
   
   const onSubmitHandler=async(data)=>{
     //console.log(data);
@@ -75,7 +74,7 @@ export default function RecipeForm() {
     };
     let getCategories= async()=>{
       try{
-        let response=await axiosInstance.get(CATEGORY_URLS.GET_CATEGORIES)
+        let response=await axiosInstance.get(CATEGORY_URLS.GET_CATEGORIES);
         // console.log(response.data.data)
         setCategories(response.data.data)
         

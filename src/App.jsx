@@ -16,15 +16,16 @@ import RecipeData from "./modules/recipes/components/recipeData/RecipeData.jsx";
 import CategoryData from "./modules/categories/components/CategoryData/CategoryData.jsx";
 import { ToastContainer } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { jwtDecode } from "jwt-decode";
 import ProtectedRoute from "./modules/shared/components/PrtectedRoute/ProtectedRoute.jsx";
 import RecipeForm from "./modules/recipes/components/RecipeForm/RecipeForm.jsx";
 import { VerifyAccount } from "./modules/authentication/VerifyAccount/VerifyAccount.jsx";
 import Favourites from "./modules/Favorites/component/Favourites.jsx";
+import { AuthContext } from "./context/AuthContext.jsx";
 
 function App() {
-  
+  const  LoginData  = useContext(AuthContext);
 
   
 
